@@ -13,7 +13,8 @@ var Tracker = function() {
 
 Tracker.prototype.start = function() {
 	this.tracker.on('tweet', function (tweet) {
-  		console.log('tweet received', tweet.text)
+  		console.log('tweet received', tweet)
+
   		//TODO:Increment count
   		//TODO:Parse hashtags
   		//TODO:Parse users
