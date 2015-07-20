@@ -1,34 +1,37 @@
 var Twitter = require('node-tweet-stream'),
-Deferred = require("promised-io/promise").Deferred,
-winston = require('winston'),
 request = require("http").request,
-logger = new winston.Logger(),
 async = require("async");
-
-logger.add(winston.transports.Console);
 
 var Tracker = function() {
 	this.tracker = new Twitter({
 	    consumer_key: process.env.TWITTER_CONSUMER_KEY,
-	    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,,
+	    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
 	    token: process.env.TWITTER_TOKEN,
 	    token_secret: process.env.TWITTER_SECRET
 	});
 };
 
-Item.prototype.start = function() {
-	tracker.on('tweet', function (tweet) {
-  		console.log('tweet received', tweet)
+Tracker.prototype.start = function() {
+	this.tracker.on('tweet', function (tweet) {
+  		console.log('tweet received', tweet.text)
+  		//TODO:Increment count
+  		//TODO:Parse hashtags
+  		//TODO:Parse users
+  		//Probably implement this by sending an event w/ vital tweet info: hashtag, author, mentions.
 	});
-	tracker.on('error', function (err) {
+	this.tracker.on('error', function (err) {
   		console.log('Oh no')
 	});
 }
 
-Item.prototype.add = function(hashtag) {
-	tracker.track(hashtag);
+Tracker.prototype.add = function(hashtag) {
+	this.tracker.track(hashtag);
 }
 
-Item.prototype.remove = function(hashtag) {
-	tracker.untrack(hashtag);
+Tracker.prototype.remove = function(hashtag) {
+	this.tracker.untrack(hashtag);
 }
+
+var t = new Tracker();
+t.add("#obama");
+t.start();
