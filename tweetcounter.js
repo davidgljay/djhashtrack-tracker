@@ -6,7 +6,6 @@ var Counter = function(ee) {
 	var self=this;
 	self.tracked_hashtags={};
 	self.ee = ee;
-	console.log("Registered emitter");
 	self.ee.on('tweet', function(tweet_data) {
 
 		for (var i = tweet_data.mentions.hashtags.length - 1; i >= 0; i--) {
@@ -29,10 +28,21 @@ var Counter = function(ee) {
 				};
 
 				//Increment the authors
-				// if (self.tracked_hashtags[hashIndex].authors[])
+				if (self.tracked_hashtags[hashtag].authors[tweet_data.author]) {
+					self.tracked_hashtags[hashtag].authors[tweet_data.author] += 1;
+				} else {
+					self.tracked_hashtags[hashtag].authors[tweet_data.author] = 1;
+				}
 
 				//Increment the user mentions
-
+				for (var j = tweet_data.mentions.users.length - 1; j >= 0; j--) {
+					var mentioned_user = tweet_data.mentions.users[j];
+					if (self.tracked_hashtags[hashtag].mentions.users[mentioned_user]) {
+						self.tracked_hashtags[hashtag].mentions.users[mentioned_user] += 1;
+					} else {
+						self.tracked_hashtags[hashtag].mentions.users[mentioned_user] = 1;
+					}
+				};
 			};
 
 		};
@@ -45,7 +55,8 @@ Counter.prototype.add = function(hashtag) {
 		mentions: {
 			hashtags: {},
 			users: {}
-		}
+		},
+		authors:{}
 	};
 };
 
