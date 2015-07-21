@@ -1,6 +1,4 @@
 var Twitter = require('node-tweet-stream'),
-request = require("http").request,
-async = require("async")
 EventEmitter = require("events");
 
 var Tracker = function() {
